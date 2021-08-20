@@ -23,8 +23,8 @@ class Hospital:
         DataFrameLeft = LabelFrame(DataFrame, bd=10, relief=RIDGE, padx=10, font=("times new roman", 12, "bold"), text="Patient Information")
         DataFrameLeft.place(X=0,Y=5,width=980,height=350)
 
-        DataframeRight = LabelFrame(DataFrame, bd=10, relief=RIDGE, padx=10, font=("times new roman", 12, "bold"), text="Prescription")
-        DataframeRight.place(X=990,Y=5,width=460,height=350)
+        DataFrameRight = LabelFrame(DataFrame, bd=10, relief=RIDGE, padx=10, font=("times new roman", 12, "bold"), text="Prescription")
+        DataFrameRight.place(X=990,Y=5,width=460,height=350)
 
 
         # Buttonframe
@@ -131,6 +131,30 @@ class Hospital:
         txtPatientAddress = Entry(DataFrameLeft, font=("arial", 12, "bold"), width=35)
         txtPatientAddress.grid(row=8,column=3)
 
+
+        #DataFrameRight
+        self.txtPrescription = Text(DataFrameRight, font=("arial", 12, "bold"), width=45, height=16,padY=6)
+        self.txtPrescription.grid(row=0,column=0)
+
+
+        #Buttons
+        btnPrescription = Button(ButtonFrame,text="Prescription", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnPrescription.grid(row=0,column=0)
+
+        btnPrescriptionData = Button(ButtonFrame,text="Prescription Data", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnPrescriptionData.grid(row=0,column=1)
+
+        btnUpdate = Button(ButtonFrame,text="Update", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnUpdate.grid(row=0,column=2)
+
+        btnDelete = Button(ButtonFrame,text="Delete", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnDelete.grid(row=0,column=3)
+
+        btnClear = Button(ButtonFrame,text="Clear", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnClear.grid(row=0,column=4)
+
+        btnExit = Button(ButtonFrame,text="Exit", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnExit.grid(row=0,column=5)
 
 
 
