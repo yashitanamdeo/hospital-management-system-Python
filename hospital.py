@@ -158,16 +158,16 @@ class Hospital:
 
 
         #Buttons
-        btnPrescription = Button(ButtonFrame,text="Prescription", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnPrescription = Button(ButtonFrame,command=self.iPrescription,text="Prescription", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
         btnPrescription.grid(row=0,column=0)
 
-        btnPrescriptionData = Button(ButtonFrame,text="Prescription Data", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnPrescriptionData = Button(ButtonFrame,command=self.iPrescriptionDate,text="Prescription Data", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
         btnPrescriptionData.grid(row=0,column=1)
 
-        btnUpdate = Button(ButtonFrame,text="Update", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnUpdate = Button(ButtonFrame,command=self.update_data,text="Update", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
         btnUpdate.grid(row=0,column=2)
 
-        btnDelete = Button(ButtonFrame,text="Delete", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnDelete = Button(ButtonFrame,command=self.idelete,text="Delete", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
         btnDelete.grid(row=0,column=3)
 
         btnClear = Button(ButtonFrame,text="Clear", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
@@ -218,10 +218,144 @@ class Hospital:
         self.hospital_table.column("address",width=100)
 
         self.hospital_table.pack(fill=BOTH,expand=1)
+        self.hospital_table.bind("<ButtonRelease-1>",self.get_cursor)
+
+        self.fatch_data()
 
         
 # Functionality Declaration
+def iPrescriptionDate(self):
+    if self.Nameoftablets.get()=="" or self.ref.get()=="":
+        messagebox.showerror("Error","All fields are required")
+    else:
+        conn=mysql.connector.connect(host="localhost",username="root",password="root",database="mydata")
+        my_cursor=conn.cursor()
+        my_cursor.execute("insert into hospital values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,)",(
+            self.Nameoftablets.get(),
+            self.ref.get(),
+            self.Dose.get(),
+            self.NumberofTablets.get(),
+            self.Lot.get(),
+            self.Issuedate.get(),
+            self.ExpDate.get(),
+            self.DailyDose.get(),
+            self.StorageAdvice.get(),
+            self.nhsNumber.get(),
+            self.PatientName.get(),
+            self.DateOfBirth.get(),
+            self.PatientAddress.get()
+        ))
 
+        conn.commit()
+        self.fatch_data()
+        conn.close()
+        messagebox.showinfo("Success","Record has been inserted")
+
+
+def update(self):
+    conn=mysql.connector.connect(host="localhost",username="root",password="root",database="mydata")
+    my_cursor=conn.cursor()
+    my_cursor.execute("update hospital set NameofTablets=%s,Dose=%s,No_Of_Tablets=%s,Lot=%s,Issue_Date=%s,Exp_Date=%s,Daily_Dose=%s,Storage=%s,NHSNumber=%s,Patient_Name=%s,DOB=%s,Address=%s where Reference_No=%s",(
+        self.Nameoftablets.get(),
+        self.Dose.get(),
+        self.NumberofTablets.get(),
+        self.Lot.get(),
+        self.Issuedate.get(),
+        self.ExpDate.get(),
+        self.DailyDose.get(),
+        self.StorageAdvice.get(),
+        self.nhsNumber.get(),
+        self.PatientName.get(),
+        self.DateOfBirth.get(),
+        self.PatientAddress.get(),
+        self.ref.get(), 
+    ))
+
+def fatch_data(self):
+    conn=mysql.connector.connect(host="localhost",username="root",password="root",database="mydata")
+    my_cursor=conn.cursor()
+    my_cursor.execute("select * from hospital")
+    rows=my_cursor.fetchall()
+    if len(rows)!=0:
+        self.hospital_table.delete(*self.hospital_table.get_children())
+        for i in rows:
+            self.hospital_table.insert("",END,values=i)
+        conn.commit()
+    conn.close()
+
+
+def get_cursor(self,event=""):
+    cursor_row = self.hospital_table.focus()
+    contents = self.hospital_table.item(cursor_row)
+    row=content["values"]
+    self.Nameoftablets.set(row[0])
+    self.ref.set(row[1])
+    self.Dose.set(row[2])
+    self.NumberofTablets.set(row[3])
+    self.Lot.set(row[4])
+    self.Issuedate.set(row[5])
+    self.Expdate.set(row[6])
+    self.DailyDose.set(row[7])
+    self.StorageAdvice.set(row[8])
+    self.nhsNumber.set(row[9])
+    self.PatientName.set(row[10])
+    self.DateOfBirth.set(row[11])
+    self.PatientAddress.set(row[12])
+
+
+def iPrescription(self):
+    self.txtPrescription.insert(END,"Name of Tablets:\t\t\t"+self.Nameoftablets.get() + "\n")
+    self.txtPrescription.insert(END,"Reference No:\t\t\t"+self.ref.get() + "\n")
+    self.txtPrescription.insert(END,"Dose:\t\t\t"+self.Dose.get() + "\n")
+    self.txtPrescription.insert(END,"Number of Tablets:\t\t\t"+self.NumberofTablets.get() + "\n")
+    self.txtPrescription.insert(END,"Lot:\t\t\t"+self.Lot.get() + "\n")
+    self.txtPrescription.insert(END,"Issue Date:\t\t\t"+self.Issuedate.get() + "\n")
+    self.txtPrescription.insert(END,"Exp date:\t\t\t"+self.Expdate.get() + "\n")
+    self.txtPrescription.insert(END,"Daily Dose:\t\t\t"+self.DailyDose.get() + "\n")
+    self.txtPrescription.insert(END,"Side Effect:\t\t\t"+self.sideEffect.get() + "\n")
+    self.txtPrescription.insert(END,"Further Information:\t\t\t"+self.FurtherInformation.get() + "\n")
+    self.txtPrescription.insert(END,"Storage Advice:\t\t\t"+self.StorageAdvice.get() + "\n")
+    self.txtPrescription.insert(END,"Driving Using Machine:\t\t\t"+self.DrivingUsingMachine.get() + "\n")
+    self.txtPrescription.insert(END,"PatientID:\t\t\t"+self.PatientID.get() + "\n")
+    self.txtPrescription.insert(END,"NHSNumber:\t\t\t"+self.nhsNumber.get() + "\n")
+    self.txtPrescription.insert(END,"PatientName:\t\t\t"+self.PatientName.get() + "\n")
+    self.txtPrescription.insert(END,"DateOfBirth:\t\t\t"+self.DateOfBirth.get() + "\n")
+    self.txtPrescription.insert(END,"PatientAddress:\t\t\t"+self.PatientAddress.get() + "\n")
+
+
+def idelete(self):
+    conn=mysql.connector.connect(host="localhost",username="root",password="root",database="mydata")
+    my_cursor=conn.cursor()
+    query = "delete from hospital where Reference_No=%s"
+    value=(self.ref.get(),)
+    my_cursor.execute(query,value)
+
+    conn.commit()
+    conn.close()
+    self.fatch_data()
+    messagebox.showinfo("Delete","Patient has been deleted successfully")
+
+
+def clear(self):
+    self.Nameoftablets.set("")
+    self.ref.set("")
+    self.Dose.set("")
+    self.Nameoftablets.set("")
+    self.Lot.set("")
+    self.Issuedate.set("")
+    self.Expdate.set("")
+    self.DailyDose.set("")
+    self.sideEffect.set("")
+    self.FurtherInformation.set("")
+    self.StorageAdvice.set("")
+    self.DrivingUsingMachine.set("")
+    self.HowToUseMedication.set("")
+    self.PatientId.set("")
+    self.nhsNumber.set("")
+    self.PatientName.set("")
+    self.DateOfBirth.set("")
+    self.PatientAddress.set("")
+    self.txtPrescription.delete("1.0".END)
 
 
 root = Tk()
