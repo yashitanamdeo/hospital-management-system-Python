@@ -170,10 +170,10 @@ class Hospital:
         btnDelete = Button(ButtonFrame,command=self.idelete,text="Delete", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
         btnDelete.grid(row=0,column=3)
 
-        btnClear = Button(ButtonFrame,text="Clear", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnClear = Button(ButtonFrame,command=self.clear,text="Clear", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
         btnClear.grid(row=0,column=4)
 
-        btnExit = Button(ButtonFrame,text="Exit", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
+        btnExit = Button(ButtonFrame,command=self.iExit,text="Exit", bg="green", fg="white", font=("arial", 12, "bold"), width=23, height=16,padY=6)
         btnExit.grid(row=0,column=5)
 
 
@@ -357,6 +357,12 @@ def clear(self):
     self.PatientAddress.set("")
     self.txtPrescription.delete("1.0".END)
 
+
+def iExit(self):
+    iExit=messagebox.askyesno("Hospital Management System","Confirm you want to exit")
+    if iExit>0:
+        root.destroy()
+        return
 
 root = Tk()
 ob = Hospital(root)
